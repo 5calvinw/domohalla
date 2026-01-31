@@ -9,3 +9,8 @@ contextBridge.exposeInMainWorld("TimerAPI", {
     reset: () => ipcRenderer.invoke("timer:reset"),
     status: () => ipcRenderer.invoke("timer:status"),
 });
+
+contextBridge.exposeInMainWorld("electron", {
+  onSessionUpdate: (callback) =>
+    ipcRenderer.on("session-update", (_, data) => callback(data))
+});

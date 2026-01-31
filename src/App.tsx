@@ -1,6 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
-
+import { FaPlay, FaPause } from "react-icons/fa";
+import { IoIosRefresh } from "react-icons/io";
+import SessionBar from "./SessionBar"
 import './App.css'
+
+
 
 function formatTime(ms){
   const totalSeconds = Math.floor(ms / 1000);
@@ -18,18 +22,26 @@ function App() {
     rankedGamesFinished: 0,
   }); 
 
+  const [sessionElo, setSessionElo] = useState(0);
+const [matchHistory, setMatchHistory] = useState<("W" | "L")[]>([]);
 
-
-
+  
 
     useEffect(() => {
     const interval = setInterval(async() => {
       const state = await window.TimerAPI.status();
       setTimerState(state);
-    }, 1000);
+    }, 50);
 
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+  window.electron.onSessionUpdate(({ sessionElo, matchHistory }) => {
+    setSessionElo(sessionElo);
+    setMatchHistory(matchHistory);
+  });
+}, []);
 
 
 
@@ -49,21 +61,95 @@ function App() {
     await window.TimerAPI.reset();
   }
 
+ 
+  const RADIUS = 90;
+  const STROKE = 8;
+  const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+  const progress =
+  timerState.durationMs > 0
+    ? timerState.remainingMs / timerState.durationMs
+    : 0;
+
+  const offset =
+  CIRCUMFERENCE * (1 - progress);
+
 
   return (
     <>
-      <h1>{!timerState.hasStarted || timerState.remainingMs > 0
+
+    <div className="flex flex-col gap-6 items-center justify-center min-h-screen px-6">
+      <div>
+        <SessionBar
+          sessionElo={sessionElo}
+          matchHistory={matchHistory}
+        />
+      </div>
+      <div className="relative w-56 h-56 flex items-center justify-center">
+  <svg
+    className="absolute rotate-[-90deg]"
+    width="200"
+    height="200"
+  >
+    
+    <circle
+      cx="100"
+      cy="100"
+      r={RADIUS}
+      strokeWidth={STROKE}
+      stroke="#e5e7eb"
+      fill="none"
+      className="transition-[stroke-dashoffset] duration-1000 linear"
+    />
+
+   
+    <circle
+      cx="100"
+      cy="100"
+      r={RADIUS}
+      strokeWidth={STROKE}
+      stroke="#6366f1"
+      fill="none"
+      strokeDasharray={CIRCUMFERENCE}
+      strokeDashoffset={offset}
+      strokeLinecap="round"
+    />
+  </svg>
+
+  
+   <h1>{!timerState.hasStarted || timerState.remainingMs > 0
               ? formatTime(timerState.remainingMs)
               : timerState.state === "finished"
-                ? timerState.rankedGamesFinished
+                ? <div className="flex flex-col gap-1 pb-3"><div>{timerState.rankedGamesFinished}</div><div className="text-sm">brawlhalla games</div></div>
+                
                 : "0:00"
           }</h1>
+</div>
+      <div>
+      <button 
+      onClick={() =>{
+        if(timerState.state === "paused"){
+          resumeTimer();
+        }
+        else{
+          startTimer();
+        }
+      }}>
+      <FaPlay />
+      </button>
 
-      <button onClick={startTimer}>Start</button>
-      <button onClick={stopTimer}>Stop</button>
-      <button onClick={resumeTimer}>Resume</button>
-      <button onClick={resetTimer}>Reset</button>
+
+      <button onClick={stopTimer}><FaPause /></button>
+      <button onClick={resetTimer}><IoIosRefresh /></button>
+      </div>
+      
+   
+
+
+      </div>
+      
     </>
+
+    
   )
 }
 

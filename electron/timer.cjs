@@ -86,6 +86,7 @@ getState() {
         remainingMs: this.getRemainingTime(),
         rankedGamesFinished: this.rankedGamesFinished,
         hasStarted: this.hasStarted,
+        durationMs: this.durationMs,
     };
 }
 
