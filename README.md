@@ -1,73 +1,49 @@
-# React + TypeScript + Vite
+domohalla - Automated Pomodoro tracking using real-time computer vision in a live game environment.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project integrates OpenCV-based screen analysis with a React timer UI to automatically track focused work sessions while playing Brawlhalla, eliminating the need for manual timer control.
 
-Currently, two official plugins are available:
+Why?
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+In my study sessions using pomodoro timers, i would use the breaks to play 2 ranked games of Brawlhalla before continuing the pomodoro cycle. I created this app as a for fun project, to be able to open my game after the study time was up, and close my game automatically after 2 ranked games finished, using computer vision to detect my matches ending.
 
-## React Compiler
+---------------
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Key Features:
 
-## Expanding the ESLint configuration
+OpenCV template matching for ranked match end detection
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+False-positive prevention with confidence thresholds & cooldowns
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Automatic Pomodoro state transitions
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Interactive React + TypeScript UI
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Designed as a desktop-style workflow (Electron-compatible)
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+-----------------
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+🛠 Tech Stack
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Frontend
+
+React
+
+TypeScript
+
+CSS
+
+React Icons
+
+Backend / Detection
+
+Python
+
+OpenCV
+
+NumPy
+
+MSS
+
+Tesseract OCR (configured for extensibility)
+
+
